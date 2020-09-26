@@ -36,19 +36,24 @@
           <h4>
             Harga: <strong>Rp. {{ product.harga }}</strong>
           </h4>
-          <form class="mt-4">
+          <form class="mt-4" @submit.prevent>
             <div class="form-group">
               <label for="jumlah_pemesanan">Jumlah Pesan</label>
-              <input type="number" class="form-control" />
+              <input
+                type="number"
+                class="form-control"
+                v-model="pesan.jumlah_pesanan"
+              />
             </div>
             <div class="form-group">
               <label for="keterangan">Keterangan</label>
               <textarea
+                v-model="pesan.keterangan"
                 class="form-control"
                 placeholder="Keterangan spt: Pedas, Nasi Setengah..."
               ></textarea>
             </div>
-            <button type="submit" class="btn btn-success">
+            <button type="submit" class="btn btn-success" @click="pemesanan">
               <b-icon-cart></b-icon-cart> Pesan
             </button>
           </form>
@@ -70,11 +75,36 @@ export default {
   data() {
     return {
       product: {},
+      pesan: {},
     };
   },
   methods: {
     setProduct(data) {
       this.product = data;
+    },
+    pemesanan() {
+      if (this.pesan.jumlah_pesanan) {
+        this.pesan.product = this.product;
+        axios
+          .post(`http://localhost:3000/keranjangs`, this.pesan)
+          .then(() => {
+            this.$router.push({ path: "/keranjang" });
+            this.$toast.success("Sukses masuk keranjang", {
+              type: "success",
+              position: "top-right",
+              duration: 3000,
+              dismissible: true,
+            });
+          })
+          .catch((error) => console.log(error));
+      } else {
+        this.$toast.error("Jumlah pesanan harus diisi", {
+          type: "error",
+          position: "top-right",
+          duration: 3000,
+          dismissible: true,
+        });
+      }
     },
   },
   mounted() {
