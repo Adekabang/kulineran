@@ -11,7 +11,7 @@
                 <router-link to="/">Home</router-link>
               </li>
               <li class="breadcrumb-item">
-                <router-link to="/foods">Foods</router-link>
+                <router-link to="/foods" cl>Foods</router-link>
               </li>
               <li class="breadcrumb-item active" aria-current="page">
                 Food Order
